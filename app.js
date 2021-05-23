@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const app = express();
 
 var items =["test1", "test2"];
+var workItems =[];
 
 app.set('view engine', 'ejs');
 
@@ -22,8 +23,18 @@ app.get("/", function(req,res){
     var day = today.toLocaleDateString("en-US", options);
 
 
-res.render('lists', {day: day, newListItems: items});
+res.render('lists', {listTitle: day, newListItems: items});
 });
+
+app.get("/work", function(req,res){
+    res.render("lists", {listTitle: Worker, newListItems:workItems});
+});
+
+app.post("/", function(req,res){
+    var workItem = req.body.newItem;
+    workItems.push(workItem);
+    res.redirect("/work");
+})
 
 app.post("/", function(req, res){
     var item = req.body.newItem;
