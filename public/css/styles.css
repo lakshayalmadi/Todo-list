@@ -1,8 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Indie+Flower&family=Itim&family=Patrick+Hand&display=swap');
+
 html {
   background-color: #E4E9FD;
   background-image: -webkit-linear-gradient(65deg, #A683E3 50%, #E4E9FD 50%);
   min-height: 1000px;
-  font-family: 'helvetica neue';
+  font-family: 'Itim';
 }
 
 h1 {
@@ -37,6 +39,7 @@ h1 {
 input:checked+p {
   text-decoration: line-through;
   text-decoration-color: #A683E3;
+  font-weight: 900;
 }
 
 input[type="checkbox"] {
@@ -76,6 +79,7 @@ input[type="text"] {
   font-size: 20px;
   font-weight: 200;
   width: 313px;
+  font-family: inherit;
 }
 
 input[type="text"]:focus {

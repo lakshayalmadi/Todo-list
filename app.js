@@ -1,20 +1,57 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require('mongoose');
 const date = require(__dirname + "/date.js");
 
 const app = express();
 
-var items =["Test1"];
-var workItems =[];
+// var items =[];
+// var workItems =[];
 
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
+// mongoDB code
+
+mongoose.connect("mongodb://localhost:27017/todolistDB", {useNewUrlParser: true, useUnifiedTopology: true});
+
+const itemsSchema = new mongoose.Schema({
+    name: String
+});
+
+const Item = mongoose.model("item", itemsSchema);
+
+const item1 = new Item({
+    name: 'Study DSA'
+});
+
+const item2 = new Item({
+    name: 'Finish todo list'
+});
+
+const defaultItems = [item1, item2];
+
+Item.insertMany(defaultItems, function(err){
+    if(err){
+        console.log(err);
+    }else{
+        console.log('Succesfully inserted');
+    }
+});
+
+
+
+
+
+//  node js code
 app.get("/", function(req,res){
+
     let day = date();
-    res.render('lists', {listTitle: day, newListItems: items});
+    Item.find({}, function(err, foundItems){
+        res.render('lists', {listTitle: day, newListItems: foundItems});
+    });
 });
 
 app.post("/", function(req, res){
