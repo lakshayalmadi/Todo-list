@@ -21,7 +21,7 @@ const itemsSchema = new mongoose.Schema({
     name: String
 });
 
-const Item = mongoose.model("item", itemsSchema);
+const Item = mongoose.model("Item", itemsSchema);
 
 const item1 = new Item({
     name: 'Study DSA'
@@ -33,38 +33,46 @@ const item2 = new Item({
 
 const defaultItems = [item1, item2];
 
-Item.insertMany(defaultItems, function(err){
-    if(err){
-        console.log(err);
-    }else{
-        console.log('Succesfully inserted');
-    }
-});
-
-
-
-
-
 //  node js code
 app.get("/", function(req,res){
 
     let day = date();
     Item.find({}, function(err, foundItems){
-        res.render('lists', {listTitle: day, newListItems: foundItems});
+        if(foundItems.length === 0){
+            Item.insertMany(defaultItems, function(err){
+                if(err){
+                    console.log(err);
+                }else{
+                    console.log('Succesfully inserted');
+                }
+            });
+            res.redirect('/');
+        }else{
+            res.render('lists', {listTitle: day, newListItems: foundItems});
+        }
+        
     });
 });
 
 app.post("/", function(req, res){
-    let item = req.body.newItem;
+    let itemName = req.body.newItem;
 
-    if(req.body.list==="Work"){
-        workItems.push(item);
-        res.redirect("/work");
-    }
-    else{
-    items.push(item);
-    res.redirect("/");    
-    }
+    const item = new Item({
+        name: itemName
+    });
+    item.save();
+    res.redirect("/");
+});
+
+app.post("/delete", function(req,res){
+    const checkedItemId = req.body.checkbox;
+
+    Item.findByIdAndRemove(checkedItemId, function(err){
+        if (!err) {
+          console.log("Successfully deleted checked item.");
+          res.redirect("/");
+        }
+      });
 });
 
 app.get("/work", function(req,res){
