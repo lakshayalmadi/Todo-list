@@ -1,7 +1,10 @@
+const date = require(__dirname + "/date.js");
+
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const date = require(__dirname + "/date.js");
+
 const _ = require('lodash');
 
 const app = express();
@@ -19,7 +22,7 @@ useCreateIndex: true,
 useUnifiedTopology: true,
 useFindAndModify: false});  
 
-const itemsSchema = new mongoose.Schema({
+const itemsSchema = ({
     name: String
 });
 
@@ -27,25 +30,26 @@ const Item = mongoose.model("Item", itemsSchema);
 
 
 const item1 = new Item({
-  name: "Welcome to your todolist!"
-});
-
-const item2 = new Item({
-  name: "Hit the + button to add a new item."
-});
-
-const item3 = new Item({
-  name: "<-- Hit this to delete an item."
-});
-
+    name: "Welcome to your todolist!"
+  });
+  
+  const item2 = new Item({
+    name: "Hit the + button to add a new item."
+  });
+  
+  const item3 = new Item({
+    name: "<-- Hit this to delete an item."
+  });
+  
 const defaultItems = [item1, item2, item3];
 
 const listSchema = {
     name: String,
     items: [itemsSchema]
-};
+  };
 
-const List = mongoose.model('List', listSchema);
+const List = mongoose.model("List", listSchema);
+
 
 //  node js code
 app.get("/", function(req,res){
@@ -62,7 +66,7 @@ app.get("/", function(req,res){
             });
             res.redirect('/');
         }else{
-            res.render('lists', {listTitle: day, newListItems: foundItems});
+            res.render('lists', {listTitle: 'Today', newListItems: foundItems});
         }
         
     });
@@ -78,7 +82,6 @@ app.get("/:customListName", function(req,res){
                     name: customListName,
                     items: defaultItems
                 });
-            
                 list.save();
                 res.redirect('/'+customListName);
             }else{
@@ -96,7 +99,7 @@ app.post("/", function(req, res){
         name: itemName
     });
 
-    if(listName === day){
+    if(listName === 'Today'){
         item.save();
         res.redirect("/");
     }else{
@@ -114,7 +117,7 @@ app.post('/delete', function(req, res) {
     const listName = req.body.listName;
     let day = date();
 
-    if(listName === day){
+    if(listName === 'Today'){
         Item.findByIdAndRemove(checkedItemId, function(err) {
             if (!err) {
               console.log("You deleted the item, letsgoooooooo!");
@@ -133,6 +136,6 @@ app.post('/delete', function(req, res) {
     });
 
 
-app.listen(3000, function(){
+app.listen(3000, function() {
     console.log("Server started on port 3000");
 });
