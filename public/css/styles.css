@@ -31,7 +31,7 @@ h1 {
   background-color: #FCFCB4;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #F1F1F1;
+  border-bottom: 1px solid black;
 }
 
 .item:last-child {
@@ -62,9 +62,6 @@ p {
 form.item {
   text-align: center;
   padding-left: 20px;
-}
-.new-items{
-  text-decoration: underline;
 }
 
 button {
@@ -98,10 +95,4 @@ input[type="text"]:focus {
 ::placeholder {
   color: grey;
   opacity: 1;
-}
-
-footer {
-  color: white;
-  color: rgba(0, 0, 0, 0.5);
-  text-align: center;
 }
